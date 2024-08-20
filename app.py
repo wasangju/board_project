@@ -14,7 +14,7 @@ UPLOAD_FOLDER = os.path.join(basedir, 'uploads')
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'webp'}
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB 제한
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
@@ -32,8 +32,8 @@ class Post(db.Model):
     author = db.Column(db.String(50), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     views = db.Column(db.Integer, default=0)
-    file = db.Column(db.String(100))  # 파일명 저장 필드
-    comments = db.relationship('Comment', backref='post', lazy=True) # 댓글
+    file = db.Column(db.String(100))
+    comments = db.relationship('Comment', backref='post', lazy=True)
 
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -95,7 +95,7 @@ def register():
             session['already'] = True
             return redirect(url_for('register'))
         
-        new_user = User(username=username, password=password)  # 해싱 제거
+        new_user = User(username=username, password=password)
         db.session.add(new_user)
         db.session.commit()
         flash('회원가입이 완료되었습니다. 로그인해주세요.')
@@ -168,10 +168,8 @@ def delete(post_id):
         session['cant_delete'] = True
         return redirect(url_for('post', post_id=post_id))
     
-    # 연관된 댓글들을 먼저 삭제
     Comment.query.filter_by(post_id=post_id).delete()
     
-    # 그 다음 게시글 삭제
     db.session.delete(post)
     db.session.commit()
     session['delete_success'] = True
