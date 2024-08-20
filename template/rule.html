@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시판 규칙</title>
+    <style>
+        a{text-decoration-line: none;}
+        body { font-family: 'Malgun Gothic', sans-serif; margin: 0; padding: 20px; background-color: #f3f3f3; }
+        .container { max-width: 800px; margin: 0 auto; background-color: white; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1 { color: #3b4890; font-size: 20px; margin-bottom: 10px; }
+        .post-info { color: #666; margin-bottom: 20px; font-size: 12px; padding-bottom: 10px; border-bottom: 1px solid #e3e3e3; }
+        .content { line-height: 1.6; font-size: 14px; }
+        .back-btn { display: inline-block; padding: 8px 12px; background-color: #3b4890; color: white; text-decoration: none; font-size: 12px; margin-top: 20px; }
+        .back-btn:hover { background-color: #2d3a6d; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>게시판 규칙</h1>
+        <div class="post-info">
+            <span>글쓴이: admin</span> |
+            <span>작성일: 2007.07.26 18:45</span> |
+            <span>조회: {{ view }}</span>
+        </div>
+        <div class="content">
+            DDos나 서버에 지장이 가는 공격은 자제해주세요.<br>
+            게시판, 보안 테스트용 서버입니다.   
+        </div>
+        <a href="{{ url_for('index') }}" class="back-btn">목록으로</a>
+    </div>
+</body>
+</html>
