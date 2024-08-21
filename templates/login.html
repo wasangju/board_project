@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인</title>
+    <style>
+        body { font-family: 'Malgun Gothic', sans-serif; margin: 0; padding: 20px; background-color: #f3f3f3; }
+        .container { max-width: 400px; margin: 0 auto; background-color: white; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1 { color: #3b4890; font-size: 24px; margin-bottom: 20px; }
+        form { display: flex; flex-direction: column; }
+        label { margin-top: 10px; color: #3b4890;}
+        input { width: 95%; padding: 8px; margin-top: 5px;}
+        button { background-color: #3b4890; color: white; border: none; padding: 10px; margin-top: 20px; cursor: pointer; }
+        button:hover { background-color: #2d3a6d; }
+        .flashes { list-style-type: none; padding: 10px; margin: 10px 0; border: 1px solid; border-radius: 4px; }
+        .flashes.success { background-color: #d4edda; border-color: #c3e6cb; color: #155724; }
+        .flashes.error { background-color: #f8d7da; border-color: #f5c6cb; color: #721c24; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>로그인</h1>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <ul class="flashes {{ category }}">
+                <li>{{ message }}</li>
+              </ul>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+        <form method="POST">
+            <label for="username">사용자명:</label>
+            <input type="text" id="username" name="username" required>
+            
+            <label for="password">비밀번호:</label>
+            <input type="password" id="password" name="password" required>
+            
+            <button type="submit">로그인</button>
+        </form>
+    </div>
+</body>
+</html>
