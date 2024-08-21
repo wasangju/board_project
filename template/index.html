@@ -44,8 +44,8 @@
             <h1>wasangju.kro.kr</h1>
             <div class="user-actions">
                 {% if username %}
-                    {% if username == 'wasangju' %}
-                        <span id="user">와생주아시는구나!</span>
+                    {% if username == 'wasangju' or username == 'admin'%}
+                        <span id="user">갤주님 환영합니다</span>
                         <a href="{{ url_for('logout') }}">로그아웃</a>
                     {% else %}
                         <span id="user">{{ username }}님 환영합니다!</span>
