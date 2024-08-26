@@ -2,11 +2,12 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 from datetime import datetime
+import html
 import os
 import time
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test1.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sca.db'
 app.config['SECRET_KEY'] = 'qwer1234'
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -32,7 +33,7 @@ class Post(db.Model):
     author = db.Column(db.String(50), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     views = db.Column(db.Integer, default=0)
-    file = db.Column(db.String(100))
+    file = db.Column(db.String(100)) 
     comments = db.relationship('Comment', backref='post', lazy=True)
 
 class Comment(db.Model):
@@ -95,7 +96,7 @@ def register():
             session['already'] = True
             return redirect(url_for('register'))
         
-        new_user = User(username=username, password=password)
+        new_user = User(username=username, password=password) 
         db.session.add(new_user)
         db.session.commit()
         flash('회원가입이 완료되었습니다. 로그인해주세요.')
@@ -128,7 +129,7 @@ def post(post_id):
     
     post.views += 1
     db.session.commit()
-    return render_template('post.html', post=post, edit_success=edit_success, not_writer=not_writer, cant_delete=cant_delete, guest=guest, comment_added=comment_added)
+    return render_template('post.html', post=post, edit_success=edit_success, not_writer=not_writer,cant_delete=cant_delete, guest=guest, comment_added=comment_added)
 
 @app.route('/write', methods=['GET', 'POST'])
 def write():
@@ -139,6 +140,7 @@ def write():
     if request.method == 'POST':
         title = request.form['title']
         content = request.form['content']
+        content = html.escape(content)
         author = session['username']
         
         file = request.files.get('file')
@@ -163,7 +165,7 @@ def delete(post_id):
     post = Post.query.get_or_404(post_id)
 
     if session['username'] == 'admin':
-        session['not_writer'] = False
+        session['cant_writer'] = False
     elif post.author != session['username']:
         session['cant_delete'] = True
         return redirect(url_for('post', post_id=post_id))
@@ -193,6 +195,7 @@ def edit(post_id):
     if request.method == 'POST':
         post.title = request.form['title']
         post.content = request.form['content']
+        post.content = html.escape(request.form['content']) # xss 방지
 
         if 'delete_file' in request.form:
             if post.file:
@@ -250,4 +253,4 @@ if __name__ == '__main__':
             initial_rule_views = RuleViews(views=0)
             db.session.add(initial_rule_views)
             db.session.commit()
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5001, debug=True)
